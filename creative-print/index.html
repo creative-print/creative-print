@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8E44AD">
+<title>Creative Print - منصة الطباعة الإبداعية</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background: #f0f2f5; min-height: 100vh; overflow-x: hidden; }
+.hidden { display: none !important; }
+
+/* ===== شاشة البداية ===== */
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(135deg, #8E44AD 0%, #3498DB 100%);
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  animation: fadeOut 0.5s ease 2.5s forwards;
+}
+.splash-logo {
+  width: 120px; height: 120px; background: white; border-radius: 30px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: bounce 1s ease infinite alternate;
+}
+.splash-logo .material-icons-outlined { font-size: 70px; color: #8E44AD; }
+.splash h1 { color: white; margin-top: 25px; font-size: 28px; font-weight: 900; letter-spacing: 2px; }
+.splash p { color: rgba(255,255,255,0.9); margin-top: 8px; font-size: 14px; }
+.splash-loader {
+  width: 50px; height: 4px; background: rgba(255,255,255,0.3);
+  border-radius: 2px; margin-top: 30px; overflow: hidden; position: relative;
+}
+.splash-loader::after {
+  content: ''; position: absolute; inset: 0; background: white;
+  animation: load 2s ease-in-out infinite;
+}
+@keyframes bounce { to { transform: translateY(-15px); } }
+@keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+/* ===== شريط التطبيق ===== */
+.app-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: linear-gradient(135deg, #8E44AD, #6C3483);
+  color: white; padding: 12px 15px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(142,68,173,0.3);
+}
+.icon-btn {
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; position: relative;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+.icon-btn:active { transform: scale(0.95); }
+.app-title { flex: 1; text-align: center; }
+.title-main { display: block; font-size: 18px; font-weight: 900; letter-spacing: 1px; }
+.title-sub { display: block; font-size: 11px; opacity: 0.9; margin-top: 2px; }
+.cart-badge {
+  position: absolute; top: -3px; left: -3px;
+  background: #FF5722; color: white; font-size: 10px; font-weight: 700;
+  min-width: 20px; height: 20px; border-radius: 10px; padding: 0 5px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid white;
+}
+.cart-badge.empty { display: none; }
+
+/* ===== المحتوى ===== */
+main { padding-bottom: 80px; min-height: calc(100vh - 140px); }
+.page { animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== الصفحة الرئيسية ===== */
+.welcome {
+  background: linear-gradient(135deg, #8E44AD, #3498DB);
+  color: white; padding: 25px 20px; margin-bottom: 10px;
+  border-radius: 0 0 30px 30px;
+}
+.welcome h2 { font-size: 22px; margin-bottom: 5px; }
+.welcome p { opacity: 0.9; font-size: 14px; }
+.menu-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 15px; padding: 20px;
+}
+@media (min-width: 600px) { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) { .menu-grid { grid-template-columns: repeat(4, 1fr); } }
+.menu-card {
+  background: white; border-radius: 20px; padding: 25px 15px;
+  text-align: center; cursor: pointer; border: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.menu-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--card-color); transform: scaleX(0); transition: transform 0.3s;
+}
+.menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.menu-card:hover::before { transform: scaleX(1); }
+.menu-card .icon-wrap {
+  width: 70px; height: 70px; margin: 0 auto 12px;
+  border-radius: 20px; display: flex; align-items: center; justify-content: center;
+  background: var(--card-bg);
+}
+.menu-card .material-icons-outlined { font-size: 38px; color: var(--card-color); }
+.menu-card-title { font-size: 14px; font-weight: 700; color: #2c3e50; }
+.menu-card-desc { font-size: 11px; color: #7f8c8d; margin-top: 4px; }
+
+/* ===== صفحة فرعية ===== */
+.page-header {
+  background: var(--page-color, #8E44AD); color: white;
+  padding: 15px 20px; display: flex; align-items: center; gap: 10px;
+  position: sticky; top: 66px; z-index: 50;
+}
+.page-header h2 { flex: 1; font-size: 18px; }
+
+/* ===== التصنيفات ===== */
+.categories {
+  display: flex; gap: 10px; padding: 15px; overflow-x: auto;
+  background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.categories::-webkit-scrollbar { height: 4px; }
+.categories::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+.cat-card {
+  min-width: 100px; padding: 15px 10px; background: white;
+  border: 2px solid #eee; border-radius: 15px; cursor: pointer;
+  text-align: center; transition: all 0.2s; flex-shrink: 0;
+}
+.cat-card:hover { transform: translateY(-2px); border-color: var(--page-color); }
+.cat-card.active {
+  background: var(--page-color); color: white; border-color: var(--page-color);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+.cat-card .material-icons-outlined { font-size: 30px; }
+.cat-card span:last-child { display: block; font-size: 12px; font-weight: 700; margin-top: 5px; }
+
+/* ===== شبكة المنتجات ===== */
+.products-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; padding: 15px;
+}
+@media (min-width: 600px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1200px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
+.product-card {
+  background: white; border-radius: 15px; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor: pointer;
+  transition: all 0.3s; position: relative;
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+.product-image {
+  width: 100%; aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--card-bg, #f5f5f5), #fff);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.product-image .material-icons-outlined {
+  font-size: 80px; color: var(--card-color, #8E44AD); opacity: 0.7;
+}
+.product-image .badge {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--card-color); color: white;
+  padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;
+}
+.product-info { padding: 10px; }
+.product-name { font-size: 13px; font-weight: 700; color: #2c3e50; margin-bottom: 4px; }
+.product-price { font-size: 14px; font-weight: 900; color: #e74c3c; }
+.product-price small { font-size: 10px; color: #7f8c8d; font-weight: 400; }
+
+/* ===== شريط البحث ===== */
+.search-bar {
+  padding: 15px; background: white;
+  display: flex; gap: 10px; align-items: center;
+}
+.search-input {
+  flex: 1; padding: 12px 18px; border: 2px solid #eee;
+  border-radius: 25px; font-size: 14px; outline: none; font-family: inherit;
+}
+.search-input:focus { border-color: var(--page-color, #8E44AD); }
+
+/* ===== النافذة السفلية ===== */
+.bottom-sheet {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: flex-end;
+}
+.sheet-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
+.sheet-content {
+  position: relative; width: 100%; background: white;
+  border-radius: 25px 25px 0 0; padding: 20px;
+  max-height: 80vh; overflow-y: auto;
+  animation: slideUp 0.3s;
+}
+@keyframes slideUp { from { transform: translateY(100%); } }
+.sheet-handle {
+  width: 50px; height: 5px; background: #ddd;
+  border-radius: 3px; margin: 0 auto 15px;
+}
+.sheet-title {
+  font-size: 16px; font-weight: 700; text-align: center;
+  margin-bottom: 15px; color: #2c3e50;
+  padding: 12px; background: #f5f5f5; border-radius: 12px;
+}
+.sheet-option {
+  display: flex; align-items: center; gap: 15px;
+  width: 100%; padding: 15px; background: white;
+  border: 1px solid #eee; border-radius: 12px; cursor: pointer;
+  font-size: 14px; font-family: inherit; margin-bottom: 8px;
+  transition: all 0.2s; text-align: right;
+}
+.sheet-option:hover { background: #f9f9f9; transform: translateX(-3px); }
+.sheet-option .material-icons-outlined { font-size: 24px; }
+
+/* ===== Modal ===== */
+.modal {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.6); display: flex;
+  align-items: center; justify-content: center; padding: 20px;
+  animation: fadeIn 0.2s;
+}
+.modal-box {
+  background: white; border-radius: 20px; padding: 25px;
+  width: 100%; max-width: 400px;
+  animation: zoomIn 0.3s;
+}
+@keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } }
+.modal-box h3 { color: #2c3e50; margin-bottom: 15px; text-align: center; }
+.modal-box .icon-large {
+  width: 80px; height: 80px; margin: 0 auto 15px;
+  background: linear-gradient(135deg, #8E44AD, #3498DB);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.modal-box .icon-large .material-icons-outlined { font-size: 45px; color: white; }
+.modal-input {
+  width: 100%; padding: 14px; border: 2px solid #eee;
+  border-radius: 12px; font-size: 16px; font-family: inherit;
+  text-align: center; letter-spacing: 5px; outline: none;
+}
+.modal-input:focus { border-color: #8E44AD; }
+.modal-actions {
+  display: flex; gap: 10px; margin-top: 20px;
+}
+.btn {
+  flex: 1; padding: 12px; border: none; border-radius: 12px;
+  font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px;
+  transition: all 0.2s;
+}
+.btn-primary { background: linear-gradient(135deg, #8E44AD, #6C3483); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(142,68,173,0.4); }
+.btn-secondary { background: #ecf0f1; color: #2c3e50; }
+.btn-danger { background: #e74c3c; color: white; }
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%); z-index: 9999;
+  background: #2c3e50; color: white; padding: 12px 25px;
+  border-radius: 25px; font-size: 14px; font-weight: 600;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  animation: toastIn 0.3s, toastOut 0.3s 2.2s forwards;
+}
+.toast.success { background: #27ae60; }
+.toast.error { background: #e74c3c; }
+.toast.warning { background: #f39c12; }
+@keyframes toastIn { from { transform: translate(-50%, 50px); opacity: 0; } }
+@keyframes toastOut { to { transform: translate(-50%, 50px); opacity: 0; } }
+
+/* ===== شريط التنقل السفلي ===== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  background: white; display: flex; justify-content: space-around;
+  padding: 8px 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  border-top: 1px solid #eee;
+}
+.nav-item {
+  background: none; border: none; cursor: pointer; padding: 8px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: #95a5a6; font-family: inherit; font-size: 11px; font-weight: 600;
+  transition: all 0.2s; border-radius: 12px;
+}
+.nav-item .material-icons-outlined { font-size: 24px; }
+.nav-item.active { color: #8E44AD; }
+.nav-item.active .material-icons-outlined { transform: scale(1.1); }
+
+/* ===== صفحة السلة ===== */
+.cart-list { padding: 15px; }
+.cart-item {
+  background: white; border-radius: 15px; padding: 12px;
+  margin-bottom: 10px; display: flex; gap: 12px; align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.cart-item-img {
+  width: 70px; height: 70px; border-radius: 12px;
+  background: linear-gradient(135deg, #f0f0f0, #fff);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.cart-item-img .material-icons-outlined { font-size: 35px; color: #8E44AD; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-weight: 700; font-size: 14px; color: #2c3e50; }
+.cart-item-cat { font-size: 12px; color: #7f8c8d; margin: 3px 0; }
+.cart-item-price { font-weight: 900; color: #e74c3c; font-size: 15px; }
+.cart-item-actions { display: flex; flex-direction: column; gap: 5px; }
+.cart-summary {
+  background: white; padding: 20px; margin: 15px;
+  border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.summary-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; font-size: 14px;
+}
+.summary-row.total {
+  border-top: 2px dashed #eee; margin-top: 10px;
+  padding-top: 15px; font-size: 18px; font-weight: 900;
+}
+.summary-row.total span:last-child { color: #e74c3c; }
+.checkout-btn {
+  width: 100%; padding: 15px; background: linear-gradient(135deg, #27ae60, #229954);
+  color: white; border: none; border-radius: 12px; font-size: 16px;
+  font-weight: 700; cursor: pointer; margin-top: 15px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit;
+}
+.checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(39,174,96,0.4); }
+
+/* ===== الحالة الفارغة ===== */
+.empty-state {
+  text-align: center; padding: 60px 30px; color: #95a5a6;
+}
+.empty-state .material-icons-outlined {
+  font-size: 100px; opacity: 0.3; margin-bottom: 15px;
+}
+.empty-state h3 { color: #7f8c8d; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; }
+
+/* ===== الاستبيان ===== */
+.survey-form { padding: 20px; max-width: 600px; margin: 0 auto; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-weight: 700; margin-bottom: 8px; color: #2c3e50; }
+.form-input, .form-textarea {
+  width: 100%; padding: 12px; border: 2px solid #eee;
+  border-radius: 12px; font-family: inherit; font-size: 14px; outline: none;
+}
+.form-input:focus, .form-textarea:focus { border-color: #8E44AD; }
+.form-textarea { resize: vertical; min-height: 100px; }
+.rating { display: flex; gap: 8px; justify-content: center; margin: 15px 0; }
+.rating .star {
+  font-size: 40px; cursor: pointer; color: #ddd;
+  transition: all 0.2s;
+}
+.rating .star.active { color: #f39c12; transform: scale(1.1); }
+.rating .star:hover { transform: scale(1.2); }
+</style>
+</head>
+<body>
+
+<!-- شاشة البداية -->
+<div id="splash" class="splash">
+  <div class="splash-logo">
+    <span class="material-icons-outlined">print</span>
+  </div>
+  <h1>CREATIVE PRINT</h1>
+  <p>منصة الطباعة الإبداعية</p>
+  <div class="splash-loader"></div>
+</div>
+
+<!-- التطبيق -->
+<div id="app" class="hidden">
+  <header class="app-bar">
+    <button class="icon-btn" onclick="showAdminLogin()" title="دخول المسؤول">
+      <span class="material-icons-outlined" id="adminIcon">person_outline</span>
+    </button>
+    <div class="app-title">
+      <span class="title-main">CREATIVE PRINT</span>
+      <span class="title-sub" id="adminLabel"></span>
+    </div>
+    <button class="icon-btn" onclick="navigate('cart')">
+      <span class="material-icons-outlined">shopping_cart</span>
+      <span class="cart-badge empty" id="cartBadge">0</span>
+    </button>
+  </header>
+
+  <main id="content"></main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home" onclick="navigate('home')">
+      <span class="material-icons-outlined">home</span>
+      <span>الرئيسية</span>
+    </button>
+    <button class="nav-item" data-page="cart" onclick="navigate('cart')">
+      <span class="material-icons-outlined">shopping_bag</span>
+      <span>السلة</span>
+    </button>
+    <button class="nav-item" data-page="survey" onclick="navigate('survey')">
+      <span class="material-icons-outlined">rate_review</span>
+      <span>تقييم</span>
+    </button>
+    <button class="nav-item" data-page="contact" onclick="navigate('contact')">
+      <span class="material-icons-outlined">support_agent</span>
+      <span>تواصل</span>
+    </button>
+  </nav>
+</div>
+
+<!-- حاوي للمودالات -->
+<div id="modalContainer"></div>
+
+<script>
+// ============================================
+// البيانات الأساسية
+// ============================================
+const CONFIG = {
+  phoneNumber: "213699974776",
+  adminPin: "1234",
+  currency: "دج"
+};
+
+const SECTIONS = {
+  certificates: {
+    title: "الشهادات", icon: "card_membership",
+    color: "#3498DB", bg: "#E8F4FD",
+    desc: "شهادات تقدير وتخرج"
+  },
+  badges: {
+    title: "الجوائز والأوسمة", icon: "emoji_events",
+    color: "#E67E22", bg: "#FDF2E9",
+    desc: "ميداليات وأوسمة"
+  },
+  invitations: {
+    title: "بطاقات الدعوة", icon: "mail",
+    color: "#16A085", bg: "#E8F8F5",
+    desc: "دعوات أعراس ومناسبات"
+  },
+  thermal: {
+    title: "الطباعة الحرارية", icon: "local_printshop",
+    color: "#8E44AD", bg: "#F4ECF7",
+    desc: "طباعة على الأكواب والقمصان"
+  },
+  gifts: {
+    title: "الهدايا", icon: "card_giftcard",
+    color: "#E91E63", bg: "#FCE4EC",
+    desc: "هدايا مخصصة"
+  },
+  business: {
+    title: "بطاقات أعمال", icon: "badge",
+    color: "#34495E", bg: "#EAEDED",
+    desc: "بطاقات تعريفية احترافية"
+  }
+};
+
+const PRODUCTS = {
+  certificates: [
+    { id: 'c1', name: 'شهادة تقدير - مدرسة', cat: 'مدارس', price: 500 },
+    { id: 'c2', name: 'شهادة تخرج - جامعة', cat: 'جامعات', price: 800 },
+    { id: 'c3', name: 'شهادة مشاركة', cat: 'مناسبات', price: 400 },
+    { id: 'c4', name: 'شهادة تفوق رياضي', cat: 'رياضة', price: 600 },
+    { id: 'c5', name: 'شهادة دورة تدريبية', cat: 'دورات', price: 700 },
+    { id: 'c6', name: 'شهادة شكر وتقدير', cat: 'مناسبات', price: 500 },
+    { id: 'c7', name: 'شهادة الأم المثالية', cat: 'مناسبات', price: 450 },
+    { id: 'c8', name: 'شهادة بطولة كرة قدم', cat: 'رياضة', price: 650 },
+  ],
+  badges: [
+    { id: 'b1', name: 'ميدالية ذهبية', cat: 'ذهبية', price: 1500 },
+    { id: 'b2', name: 'ميدالية فضية', cat: 'فضية', price: 1200 },
+    { id: 'b3', name: 'ميدالية برونزية', cat: 'برونزية', price: 1000 },
+    { id: 'b4', name: 'كأس بطولة كبير', cat: 'كؤوس', price: 5000 },
+    { id: 'b5', name: 'كأس متوسط', cat: 'كؤوس', price: 3000 },
+    { id: 'b6', name: 'درع تكريم خشبي', cat: 'دروع', price: 2500 },
+    { id: 'b7', name: 'درع تكريم كريستال', cat: 'دروع', price: 4000 },
+    { id: 'b8', name: 'وسام شرف', cat: 'أوسمة', price: 800 },
+  ],
+  invitations: [
+    { id: 'i1', name: 'دعوة عرس كلاسيكية', cat: 'أعراس', price: 100 },
+    { id: 'i2', name: 'دعوة عرس فاخرة', cat: 'أعراس', price: 200 },
+    { id: 'i3', name: 'دعوة خطوبة', cat: 'خطوبة', price: 120 },
+    { id: 'i4', name: 'دعوة عيد ميلاد', cat: 'أعياد ميلاد', price: 80 },
+    { id: 'i5', name: 'دعوة تخرج', cat: 'تخرج', price: 150 },
+    { id: 'i6', name: 'دعوة ختان', cat: 'مناسبات', price: 100 },
+    { id: 'i7', name: 'دعوة عقيقة', cat: 'مناسبات', price: 100 },
+    { id: 'i8', name: 'دعوة افتتاح محل', cat: 'تجاري', price: 250 },
+  ],
+  thermal: [
+    { id: 't1', name: 'كوب أبيض كلاسيكي', cat: 'أكواب', price: 600 },
+    { id: 't2', name: 'كوب سحري متغير', cat: 'أكواب', price: 900 },
+    { id: 't3', name: 'كوب ملون داخلياً', cat: 'أكواب', price: 750 },
+    { id: 't4', name: 'تيشيرت قطني أبيض', cat: 'ملابس', price: 1200 },
+    { id: 't5', name: 'تيشيرت ملون', cat: 'ملابس', price: 1400 },
+    { id: 't6', name: 'وسادة مطبوعة', cat: 'وسائد', price: 1000 },
+    { id: 't7', name: 'حافظة هاتف مخصصة', cat: 'إكسسوار', price: 800 },
+    { id: 't8', name: 'علبة معدنية مطبوعة', cat: 'إكسسوار', price: 1100 },
+  ],
+  gifts: [
+    { id: 'g1', name: 'صورة على خشب', cat: 'صور', price: 1500 },
+    { id: 'g2', name: 'إطار صور كريستال', cat: 'إطارات', price: 2000 },
+    { id: 'g3', name: 'بازل صورة شخصية', cat: 'بازل', price: 1200 },
+    { id: 'g4', name: 'ميدالية مفاتيح', cat: 'إكسسوار', price: 400 },
+    { id: 'g5', name: 'لوحة جدارية', cat: 'لوحات', price: 3000 },
+    { id: 'g6', name: 'علبة شوكولاتة مخصصة', cat: 'هدايا الطعام', price: 2500 },
+    { id: 'g7', name: 'دفتر مذكرات مخصص', cat: 'مكتبية', price: 800 },
+    { id: 'g8', name: 'ساعة حائط مخصصة', cat: 'ساعات', price: 2200 },
+  ],
+  business: [
+    { id: 'bz1', name: 'بطاقة عمل بسيطة', cat: 'عادي', price: 2000, qty: '100 بطاقة' },
+    { id: 'bz2', name: 'بطاقة عمل فاخرة', cat: 'فاخر', price: 3500, qty: '100 بطاقة' },
+    { id: 'bz3', name: 'بطاقة عمل بريميوم', cat: 'بريميوم', price: 5000, qty: '100 بطاقة' },
+    { id: 'bz4', name: 'بطاقة بطباعة ذهبية', cat: 'فاخر', price: 4500, qty: '100 بطاقة' },
+    { id: 'bz5', name: 'بطاقة بلاستيكية', cat: 'بلاستيك', price: 6000, qty: '100 بطاقة' },
+    { id: 'bz6', name: 'بطاقة شفافة', cat: 'بلاستيك', price: 7000, qty: '100 بطاقة' },
+  ]
+};
+
+// ============================================
+// إدارة الحالة
+// ============================================
+const State = {
+  currentPage: 'home',
+  currentSection: null,
+  selectedCategory: 'all',
+  selectedProduct: null,
+  searchQuery: '',
+  
+  get isAdmin() { return localStorage.getItem('isAdmin') === 'true'; },
+  toggleAdmin() {
+    localStorage.setItem('isAdmin', !this.isAdmin);
+    this.updateAdminUI();
+  },
+  updateAdminUI() {
+    const icon = document.getElementById('adminIcon');
+    const label = document.getElementById('adminLabel');
+    if (this.isAdmin) {
+      icon.textContent = 'admin_panel_settings';
+      label.textContent = '👑 وضع المسؤول';
+    } else {
+      icon.textContent = 'person_outline';
+      label.textContent = '';
+    }
+  }
+};
+
+// ============================================
+// السلة
+// ============================================
+const Cart = {
+  get items() { return JSON.parse(localStorage.getItem('cart') || '[]'); },
+  
+  add(product, section) {
+    const items = this.items;
+    const existing = items.find(i => i.id === product.id);
+    if (existing) {
+      existing.quantity = (existing.quantity || 1) + 1;
+      toast('✅ تم زيادة الكمية', 'success');
+    } else {
+      items.push({ ...product, section, quantity: 1, addedAt: Date.now() });
+      toast('🛒 تمت الإضافة للسلة', 'success');
+    }
+    localStorage.setItem('cart', JSON.stringify(items));
+    this.updateBadge();
+  },
+
+  remove(id) {
+    const items = this.items.filter(i => i.id !== id);
+    localStorage.setItem('cart', JSON.stringify(items));
+    this.updateBadge();
+    if (State.currentPage === 'cart') renderCart();
+  },
+
+  updateQty(id, qty) {
+    const items = this.items;
+    const item = items.find(i => i.id === id);
+    if (item) {
+      item.quantity = Math.max(1, qty);
+      localStorage.setItem('cart', JSON.stringify(items));
+      this.updateBadge();
+      if (State.currentPage === 'cart') renderCart();
+    }
+  },
+
+  clear() {
+    localStorage.removeItem('cart');
+    this.updateBadge();
+  },
+
+  get total() {
+    return this.items.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
+  },
+
+  get count() {
+    return this.items.reduce((sum, i) => sum + (i.quantity || 1), 0);
+  },
+
+  updateBadge() {
+    const badge = document.getElementById('cartBadge');
+    const count = this.count;
+    badge.textContent = count;
+    badge.classList.toggle('empty', count === 0);
+  }
+};
+
+// ============================================
+// التنقل
+// ============================================
+function navigate(page, params = {}) {
+  State.currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === page);
+  });
+  
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+  
+  switch(page) {
+    case 'home': renderHome(); break;
+    case 'section': renderSection(params.section); break;
+    case 'cart': renderCart(); break;
+    case 'survey': renderSurvey(); break;
+    case 'contact': renderContact(); break;
+  }
+  
+  window.scrollTo(0, 0);
+}
+
+// ============================================
+// الصفحة الرئيسية
+// ============================================
+function renderHome() {
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page">
+      <div class="welcome">
+        <h2>مرحباً بك! 👋</h2>
+        <p>اختر القسم الذي تريده وابدأ التصفح</p>
+      </div>
+      <div class="menu-grid">
+        ${Object.entries(SECTIONS).map(([key, sec]) => `
+          <button class="menu-card" 
+                  style="--card-color:${sec.color}; --card-bg:${sec.bg}"
+                  onclick="navigate('section', {section:'${key}'})">
+            <div class="icon-wrap">
+              <span class="material-icons-outlined">${sec.icon}</span>
+            </div>
+            <div class="menu-card-title">${sec.title}</div>
+            <div class="menu-card-desc">${sec.desc}</div>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================
+// صفحة قسم
+// ============================================
+function renderSection(sectionKey) {
+  State.currentSection = sectionKey;
+  State.selectedCategory = 'all';
+  State.searchQuery = '';
+  
+  const sec = SECTIONS[sectionKey];
+  const products = PRODUCTS[sectionKey] || [];
+  const categories = ['all', ...new Set(products.map(p => p.cat))];
+  
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page" style="--page-color:${sec.color}; --card-color:${sec.color}; --card-bg:${sec.bg}">
+      <div class="page-header">
+        <button class="icon-btn" onclick="navigate('home')">
+          <span class="material-icons-outlined">arrow_forward</span>
+        </button>
+        <h2>${sec.title}</h2>
+        <span class="material-icons-outlined">${sec.icon}</span>
+      </div>
+      
+      <div class="search-bar">
+        <input type="text" class="search-input" 
+               placeholder="🔍 ابحث في ${sec.title}..." 
+               oninput="State.searchQuery=this.value; renderProducts()">
+      </div>
+      
+      <div class="categories" id="categoriesNav">
+        ${categories.map(cat => `
+          <div class="cat-card ${State.selectedCategory === cat ? 'active' : ''}" 
+               onclick="selectCategory('${cat}')">
+            <span class="material-icons-outlined">${cat === 'all' ? 'apps' : 'label'}</span>
+            <span>${cat === 'all' ? 'الكل' : cat}</span>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div id="productsContainer"></div>
+    </div>
+  `;
+  
+  renderProducts();
+}
+
+function selectCategory(cat) {
+  State.selectedCategory = cat;
+  document.querySelectorAll('.cat-card').forEach(c => {
+    c.classList.toggle('active', c.querySelector('span:last-child').textContent === (cat === 'all' ? 'الكل' : cat));
+  });
+  renderProducts();
+}
+
+function renderProducts() {
+  const sec = SECTIONS[State.currentSection];
+  let products = PRODUCTS[State.currentSection] || [];
+  
+  if (State.selectedCategory !== 'all') {
+    products = products.filter(p => p.cat === State.selectedCategory);
+  }
+  if (State.searchQuery) {
+    products = products.filter(p => p.name.includes(State.searchQuery));
+  }
+  
+  const container = document.getElementById('productsContainer');
+  if (products.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <span class="material-icons-outlined">search_off</span>
+        <h3>لا توجد نتائج</h3>
+        <p>جرب البحث بكلمات أخرى</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="products-grid">
+      ${products.map(p => `
+        <div class="product-card" onclick='showProductOptions(${JSON.stringify(p)})'>
+          <div class="product-image">
+            <span class="material-icons-outlined">${sec.icon}</span>
+            <span class="badge">${p.cat}</span>
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">${p.price} ${CONFIG.currency} ${p.qty ? `<small>/ ${p.qty}</small>` : ''}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ============================================
+// خيارات المنتج
+// ============================================
+function showProductOptions(product) {
+  State.selectedProduct = product;
+  const sheet = document.createElement('div');
+  sheet.className = 'bottom-sheet';
+  sheet.id = 'optionsSheet';
+  sheet.innerHTML = `
+    <div class="sheet-overlay" onclick="closeSheet()"></div>
+    <div class="sheet-content">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">${product.name}<br><small style="color:#e74c3c;font-size:18px">${product.price} ${CONFIG.currency}</small></div>
+      
+      <button class="sheet-option" onclick="addToCartAction()">
+        <span class="material-icons-outlined" style="color:#27ae60">add_shopping_cart</span>
+        <div>
+          <div style="font-weight:700">إضافة للسلة</div>
+          <div style="font-size:12px;color:#7f8c8d">احفظ لطلب لاحقاً</div>
+        </div>
+      </button>
+      
+      <button class="sheet-option" onclick="orderViaWhatsApp()">
+        <span class="material-icons-outlined" style="color:#25D366">chat</span>
+        <div>
+          <div style="font-weight:700">طلب عبر واتساب</div>
+          <div style="font-size:12px;color:#7f8c8d">طلب سريع مباشر</div>
+        </div>
+      </button>
+      
+      <button class="sheet-option" onclick="showProductDetails()">
+        <span class="material-icons-outlined" style="color:#3498DB">info</span>
+        <div>
+          <div style="font-weight:700">تفاصيل المنتج</div>
+          <div style="font-size:12px;color:#7f8c8d">معلومات إضافية</div>
+        </div>
+      </button>
+      
+      ${State.isAdmin ? `
+        <button class="sheet-option" onclick="editProduct()">
+          <span class="material-icons-outlined" style="color:#e74c3c">edit</span>
+          <div>
+            <div style="font-weight:700">تعديل المنتج (مسؤول)</div>
+            <div style="font-size:12px;color:#7f8c8d">تعديل البيانات</div>
+          </div>
+        </button>
+      ` : ''}
+    </div>
+  `;
+  document.getElementById('modalContainer').appendChild(sheet);
+}
+
+function closeSheet() {
+  const sheet = document.getElementById('optionsSheet');
+  if (sheet) sheet.remove();
+}
+
+function addToCartAction() {
+  Cart.add(State.selectedProduct, State.currentSection);
+  closeSheet();
+}
+
+function orderViaWhatsApp() {
+  const p = State.selectedProduct;
+  const sec = SECTIONS[State.currentSection];
+  const msg = `🌟 *طلب من Creative Print*\n\n📦 المنتج: ${p.name}\n📁 القسم: ${sec.title}\n🏷️ التصنيف: ${p.cat}\n💰 السعر: ${p.price} ${CONFIG.currency}\n\nأرغب في طلب هذا المنتج، شكراً!`;
+  const url = `https://wa.me/${CONFIG.phoneNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  closeSheet();
+}
+
+function showProductDetails() {
+  closeSheet();
+  const p = State.selectedProduct;
+  const sec = SECTIONS[State.currentSection];
+  showModal(`
+    <div class="icon-large" style="background:${sec.color}">
+      <span class="material-icons-outlined">${sec.icon}</span>
+    </div>
+    <h3>${p.name}</h3>
+    <div style="text-align:right; padding:15px; background:#f9f9f9; border-radius:12px; margin-top:10px">
+      <p style="margin-bottom:8px"><strong>📁 القسم:</strong> ${sec.title}</p>
+      <p style="margin-bottom:8px"><strong>🏷️ التصنيف:</strong> ${p.cat}</p>
+      <p style="margin-bottom:8px"><strong>💰 السعر:</strong> ${p.price} ${CONFIG.currency}</p>
+      ${p.qty ? `<p style="margin-bottom:8px"><strong>📦 الكمية:</strong> ${p.qty}</p>` : ''}
+      <p><strong>🆔 الكود:</strong> ${p.id}</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">إغلاق</button>
+      <button class="btn btn-primary" onclick="closeModal(); Cart.add(${JSON.stringify(p).replace(/"/g, '&quot;')}, '${State.currentSection}')">إضافة للسلة</button>
+    </div>
+  `);
+}
+
+function editProduct() {
+  closeSheet();
+  toast('🔧 ميزة التعديل قيد التطوير', 'warning');
+}
+
+// ============================================
+// السلة
+// ============================================
+function renderCart() {
+  const items = Cart.items;
+  const content = document.getElementById('content');
+  
+  if (items.length === 0) {
+    content.innerHTML = `
+      <div class="page">
+        <div class="page-header" style="background:#27ae60">
+          <button class="icon-btn" onclick="navigate('home')">
+            <span class="material-icons-outlined">arrow_forward</span>
+          </button>
+          <h2>سلة المشتريات</h2>
+          <span class="material-icons-outlined">shopping_cart</span>
+        </div>
+        <div class="empty-state">
+          <span class="material-icons-outlined">remove_shopping_cart</span>
+          <h3>السلة فارغة</h3>
+          <p>أضف منتجات لتظهر هنا</p>
+          <button class="btn btn-primary" style="margin-top:20px;max-width:200px" onclick="navigate('home')">
+            تصفح المنتجات
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  
+  content.innerHTML = `
+    <div class="page">
+      <div class="page-header" style="background:#27ae60">
+        <button class="icon-btn" onclick="navigate('home')">
+          <span class="material-icons-outlined">arrow_forward</span>
+        </button>
+        <h2>السلة (${items.length})</h2>
+        <button class="icon-btn" onclick="confirmClearCart()" title="إفراغ السلة">
+          <span class="material-icons-outlined">delete_sweep</span>
+        </button>
+      </div>
+      
+      <div class="cart-list">
+        ${items.map(item => {
+          const sec = SECTIONS[item.section];
+          return `
+            <div class="cart-item">
+              <div class="cart-item-img" style="background:${sec.bg}">
+                <span class="material-icons-outlined" style="color:${sec.color}">${sec.icon}</span>
+              </div>
+              <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-cat">${sec.title} • ${item.cat}</div>
+                <div class="cart-item-price">${item.price * (item.quantity || 1)} ${CONFIG.currency}</div>
+                <div style="display:flex;gap:8px;align-items:center;margin-top:5px">
+                  <button class="icon-btn" style="width:30px;height:30px;background:#eee;color:#333" onclick="Cart.updateQty('${item.id}', ${(item.quantity||1)-1})">
+                    <span class="material-icons-outlined" style="font-size:18px">remove</span>
+                  </button>
+                  <span style="font-weight:700;min-width:25px;text-align:center">${item.quantity || 1}</span>
+                  <button class="icon-btn" style="width:30px;height:30px;background:#eee;color:#333" onclick="Cart.updateQty('${item.id}', ${(item.quantity||1)+1})">
+                    <span class="material-icons-outlined" style="font-size:18px">add</span>
+                  </button>
+                </div>
+              </div>
+              <div class="cart-item-actions">
+                <button class="icon-btn" style="background:#fee;color:#e74c3c" onclick="Cart.remove('${item.id}')">
+                  <span class="material-icons-outlined">delete</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>عدد المنتجات:</span>
+          <span>${Cart.count}</span>
+        </div>
+        <div class="summary-row">
+          <span>المجموع الفرعي:</span>
+          <span>${Cart.total} ${CONFIG.currency}</span>
+        </div>
+        <div class="summary-row">
+          <span>التوصيل:</span>
+          <span style="color:#27ae60">يحدد لاحقاً</span>
+        </div>
+        <div class="summary-row total">
+          <span>الإجمالي:</span>
+          <span>${Cart.total} ${CONFIG.currency}</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()">
+          <span class="material-icons-outlined">send</span>
+          إرسال الطلب عبر واتساب
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function confirmClearCart() {
+  showModal(`
+    <div class="icon-large" style="background:#e74c3c">
+      <span class="material-icons-outlined">warning</span>
+    </div>
+    <h3>تفريغ السلة</h3>
+    <p style="text-align:center;color:#7f8c8d;margin:15px 0">هل أنت متأكد من حذف جميع المنتجات؟</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+      <button class="btn btn-danger" onclick="Cart.clear(); closeModal(); renderCart(); toast('تم تفريغ السلة','warning')">حذف الكل</button>
+    </div>
+  `);
+}
+
+function checkout() {
+  const items = Cart.items;
+  let msg = `🛒 *طلب جديد من Creative Print*\n\n`;
+  msg += `📋 *تفاصيل الطلب:*\n`;
+  msg += `━━━━━━━━━━━━━━━\n\n`;
+  
+  items.forEach((item, i) => {
+    const sec = SECTIONS[item.section];
+    msg += `${i+1}. *${item.name}*\n`;
+    msg += `   📁 ${sec.title}\n`;
+    msg += `   🔢 الكمية: ${item.quantity || 1}\n`;
+    msg += `   💰 ${item.price * (item.quantity || 1)} ${CONFIG.currency}\n\n`;
+  });
+  
+  msg += `━━━━━━━━━━━━━━━\n`;
+  msg += `📦 إجمالي القطع: ${Cart.count}\n`;
+  msg += `💵 *المجموع الكلي: ${Cart.total} ${CONFIG.currency}*\n\n`;
+  msg += `⏰ ${new Date().toLocaleString('ar-DZ')}`;
+  
+  const url = `https://wa.me/${CONFIG.phoneNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  toast('✅ تم إرسال الطلب', 'success');
+}
+
+// ============================================
+// الاستبيان
+// ============================================
+function renderSurvey() {
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page">
+      <div class="page-header" style="background:#f39c12">
+        <button class="icon-btn" onclick="navigate('home')">
+          <span class="material-icons-outlined">arrow_forward</span>
+        </button>
+        <h2>رأيك يهمنا</h2>
+        <span class="material-icons-outlined">rate_review</span>
+      </div>
+      
+      <div class="survey-form">
+        <div style="background:white;padding:20px;border-radius:15px;text-align:center;margin-bottom:20px">
+          <h3 style="color:#2c3e50">⭐ قيّم تجربتك معنا</h3>
+          <p style="color:#7f8c8d;margin-top:5px;font-size:13px">رأيك يساعدنا على التحسين</p>
+        </div>
+        
+        <form onsubmit="submitSurvey(event)">
+          <div class="form-group">
+            <label class="form-label">👤 اسمك (اختياري)</label>
+            <input type="text" class="form-input" id="surveyName" placeholder="أدخل اسمك">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">📞 رقم الهاتف (اختياري)</label>
+            <input type="tel" class="form-input" id="surveyPhone" placeholder="0X XX XX XX XX">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">⭐ تقييمك للخدمة</label>
+            <div class="rating" id="ratingStars">
+              ${[1,2,3,4,5].map(i => `<span class="star" data-rating="${i}" onclick="setRating(${i})">★</span>`).join('')}
+            </div>
+            <input type="hidden" id="surveyRating" value="0">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">💬 ملاحظاتك واقتراحاتك</label>
+            <textarea class="form-textarea" id="surveyComment" placeholder="شاركنا رأيك..."></textarea>
+          </div>
+          
+          <button type="submit" class="checkout-btn" style="background:linear-gradient(135deg,#f39c12,#e67e22)">
+            <span class="material-icons-outlined">send</span>
+            إرسال التقييم
+          </button>
+        </form>
+      </div>
+    </div>
+  `;
+}
+
+function setRating(n) {
+  document.getElementById('surveyRating').value = n;
+  document.querySelectorAll('#ratingStars .star').forEach((s, i) => {
+    s.classList.toggle('active', i < n);
+  });
+}
+
+function submitSurvey(e) {
+  e.preventDefault();
+  const rating = document.getElementById('surveyRating').value;
+  const name = document.getElementById('surveyName').value || 'عميل';
+  const phone = document.getElementById('surveyPhone').value || 'غير محدد';
+  const comment = document.getElementById('surveyComment').value || 'لا يوجد';
+  
+  if (rating === '0') {
+    toast('⭐ يرجى اختيار التقييم', 'error');
+    return;
+  }
+  
+  const msg = `📝 *تقييم جديد - Creative Print*\n\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n⭐ التقييم: ${'⭐'.repeat(rating)} (${rating}/5)\n\n💬 الملاحظات:\n${comment}\n\n⏰ ${new Date().toLocaleString('ar-DZ')}`;
+  
+  const url = `https://wa.me/${CONFIG.phoneNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  toast('✅ شكراً على تقييمك', 'success');
+  setTimeout(() => navigate('home'), 1500);
+}
+
+// ============================================
+// التواصل
+// ============================================
+function renderContact() {
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page">
+      <div class="page-header" style="background:#16A085">
+        <button class="icon-btn" onclick="navigate('home')">
+          <span class="material-icons-outlined">arrow_forward</span>
+        </button>
+        <h2>تواصل معنا</h2>
+        <span class="material-icons-outlined">support_agent</span>
+      </div>
+      
+      <div style="padding:20px;max-width:500px;margin:0 auto">
+        <div style="background:linear-gradient(135deg,#16A085,#1ABC9C);color:white;padding:30px;border-radius:20px;text-align:center;margin-bottom:20px">
+          <span class="material-icons-outlined" style="font-size:60px;margin-bottom:10px">store</span>
+          <h2>Creative Print</h2>
+          <p style="opacity:0.9;margin-top:5px">نحن في خدمتك دائماً</p>
+        </div>
+        
+        <button class="sheet-option" style="background:#25D366;color:white;border:none" onclick="window.open('https://wa.me/${CONFIG.phoneNumber}','_blank')">
+          <span class="material-icons-outlined">chat</span>
+          <div>
+            <div style="font-weight:700">واتساب</div>
+            <div style="font-size:12px;opacity:0.9">+${CONFIG.phoneNumber}</div>
+          </div>
+        </button>
+        
+        <button class="sheet-option" style="background:#3498DB;color:white;border:none" onclick="window.open('tel:+${CONFIG.phoneNumber}')">
+          <span class="material-icons-outlined">phone</span>
+          <div>
+            <div style="font-weight:700">اتصال مباشر</div>
+            <div style="font-size:12px;opacity:0.9">اضغط للاتصال</div>
+          </div>
+        </button>
+        
+        <button class="sheet-option" style="background:#E91E63;color:white;border:none" onclick="window.open('https://www.facebook.com','_blank')">
+          <span class="material-icons-outlined">facebook</span>
+          <div>
+            <div style="font-weight:700">فيسبوك</div>
+            <div style="font-size:12px;opacity:0.9">تابعنا على فيسبوك</div>
+          </div>
+        </button>
+        
+        <button class="sheet-option" style="background:#E1306C;color:white;border:none" onclick="window.open('https://www.instagram.com','_blank')">
+          <span class="material-icons-outlined">photo_camera</span>
+          <div>
+            <div style="font-weight:700">انستغرام</div>
+            <div style="font-size:12px;opacity:0.9">شاهد أعمالنا</div>
+          </div>
+        </button>
+        
+        <div style="background:white;padding:20px;border-radius:15px;margin-top:20px;text-align:center">
+          <h4 style="color:#2c3e50;margin-bottom:10px">⏰ أوقات العمل</h4>
+          <p style="color:#7f8c8d;font-size:14px">السبت - الخميس: 9 صباحاً - 8 مساءً</p>
+          <p style="color:#7f8c8d;font-size:14px">الجمعة: مغلق</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================
+// المسؤول
+// ============================================
+function showAdminLogin() {
+  if (State.isAdmin) {
+    showModal(`
+      <div class="icon-large" style="background:#e74c3c">
+        <span class="material-icons-outlined">logout</span>
+      </div>
+      <h3>الخروج من وضع المسؤول</h3>
+      <p style="text-align:center;color:#7f8c8d;margin:15px 0">هل تريد الخروج من وضع المسؤول؟</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+        <button class="btn btn-danger" onclick="State.toggleAdmin(); closeModal(); toast('تم الخروج','warning')">خروج</button>
+      </div>
+    `);
+    return;
+  }
+  
+  showModal(`
+    <div class="icon-large">
+      <span class="material-icons-outlined">admin_panel_settings</span>
+    </div>
+    <h3>دخول المسؤول</h3>
+    <p style="text-align:center;color:#7f8c8d;margin:10px 0 20px">أدخل الرمز السري</p>
+    <input type="password" class="modal-input" id="pinInput" maxlength="4" placeholder="****" 
+           onkeyup="if(event.key==='Enter')checkPin()">
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+      <button class="btn btn-primary" onclick="checkPin()">دخول</button>
+    </div>
+  `);
+  setTimeout(() => document.getElementById('pinInput')?.focus(), 100);
+}
+
+function checkPin() {
+  const pin = document.getElementById('pinInput').value;
+  if (pin === CONFIG.adminPin) {
+    State.toggleAdmin();
+    closeModal();
+    toast('👑 مرحباً بك في وضع المسؤول', 'success');
+  } else {
+    toast('❌ الرمز غير صحيح', 'error');
+    document.getElementById('pinInput').value = '';
+  }
+}
+
+// ============================================
+// أدوات مساعدة
+// ============================================
+function showModal(html) {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.id = 'currentModal';
+  modal.innerHTML = `<div class="modal-box">${html}</div>`;
+  modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+  document.getElementById('modalContainer').appendChild(modal);
+}
+
+function closeModal() {
+  const modal = document.getElementById('currentModal');
+  if (modal) modal.remove();
+}
+
+function toast(message, type = '') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = message;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// ============================================
+// التشغيل
+// ============================================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('app').classList.remove('hidden');
+    State.updateAdminUI();
+    Cart.updateBadge();
+    navigate('home');
+  }, 2800);
+});
+</script>
+</body>
+</html>
